@@ -26,7 +26,7 @@ public class NBTBaseComparator implements Comparator<NBTBase> {
      */
     public static Comparator<NBTBase> INSTANCE = new NBTBaseComparator(null);
 
-    private static final Field FIELD_NBT_LONG_ARRAY_DATA = ReflectionHelper.findField(NBTTagLongArray.class, "field_193587_b", "data");
+    private static final Field FIELD_NBT_LONG_ARRAY_DATA = ReflectionHelper.findField(NBTTagLongArray.class, "data", "field_193587_b");
 
     private final INbtPathNavigation ignoreNbtNavigation;
 

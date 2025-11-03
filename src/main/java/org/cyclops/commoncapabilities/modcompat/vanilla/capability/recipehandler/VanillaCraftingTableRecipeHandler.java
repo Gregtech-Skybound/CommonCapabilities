@@ -3,6 +3,7 @@ package org.cyclops.commoncapabilities.modcompat.vanilla.capability.recipehandle
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -27,10 +29,7 @@ import org.cyclops.commoncapabilities.api.ingredient.PrototypedIngredient;
 import org.cyclops.cyclopscore.helper.CraftingHelpers;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +40,8 @@ public class VanillaCraftingTableRecipeHandler implements IRecipeHandler {
 
     private static final Set<IngredientComponent<?, ?>> COMPONENTS_INPUT  = Sets.newHashSet(IngredientComponent.ITEMSTACK);
     private static final Set<IngredientComponent<?, ?>> COMPONENTS_OUTPUT = Sets.newHashSet(IngredientComponent.ITEMSTACK);
+
+    private final List<IRecipeDefinition> CACHED_RECIPES = new ArrayList<>();
 
     public static final Container DUMMY_CONTAINTER = new Container() {
         @Override
@@ -106,13 +107,17 @@ public class VanillaCraftingTableRecipeHandler implements IRecipeHandler {
 
     @Override
     public Collection<IRecipeDefinition> getRecipes() {
-        return Collections2.transform(ForgeRegistries.RECIPES.getValuesCollection(), new Function<IRecipe, IRecipeDefinition>() {
+        if (!CACHED_RECIPES.isEmpty()) {
+            return this.CACHED_RECIPES;
+        }
+        CACHED_RECIPES.addAll(Collections2.transform(ForgeRegistries.RECIPES.getValuesCollection(), new Function<IRecipe, IRecipeDefinition>() {
             @Nullable
             @Override
             public IRecipeDefinition apply(@Nullable IRecipe input) {
                 return VanillaCraftingTableRecipeHandler.recipeToRecipeDefinition(input);
             }
-        });
+        }));
+        return CACHED_RECIPES;
     }
 
     @Nullable
@@ -123,6 +128,7 @@ public class VanillaCraftingTableRecipeHandler implements IRecipeHandler {
             return null;
         }
 
+        // First try the recipe in a 3x3 grid
         InventoryCrafting inventoryCrafting = new InventoryCrafting(DUMMY_CONTAINTER, 3, 3);
         for (int i = 0; i < recipeIngredients.size(); i++) {
             inventoryCrafting.setInventorySlotContents(i, recipeIngredients.get(i));
@@ -130,9 +136,18 @@ public class VanillaCraftingTableRecipeHandler implements IRecipeHandler {
 
         IRecipe recipe = CraftingHelpers.findMatchingRecipeCached(inventoryCrafting, world, true);
         if (recipe == null) {
-            return null;
+            // If that failed, try in a 2x2 grid
+            if (recipeIngredients.size() <= 4) {
+                InventoryCrafting inventoryCraftingSmall = new InventoryCrafting(DUMMY_CONTAINTER, 2, 2);
+                for (int i = 0; i < recipeIngredients.size(); i++) {
+                    inventoryCraftingSmall.setInventorySlotContents(i, recipeIngredients.get(i));
+                }
+                recipe = CraftingHelpers.findMatchingRecipeCached(inventoryCraftingSmall, world, true);
+            }
+            if (recipe == null) {
+                return null;
+            }
         }
-
         return MixedIngredients.ofInstance(IngredientComponent.ITEMSTACK, recipe.getRecipeOutput());
     }
 }

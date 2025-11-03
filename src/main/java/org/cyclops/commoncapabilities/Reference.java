@@ -10,16 +10,9 @@ package org.cyclops.commoncapabilities;
 public class Reference {
 	
     // Mod info
-    public static final String MOD_ID = "commoncapabilities";
-    public static final String MOD_NAME = "CommonCapabilities";
-    public static final String MOD_VERSION = "@VERSION@";
-    public static final String MOD_BUILD_NUMBER = "@BUILD_NUMBER@";
-    public static final String MOD_CHANNEL = MOD_ID;
-    public static final String MOD_MC_VERSION = "@MC_VERSION@";
-    public static final String MOD_FINGERPRINT = "@FINGERPRINT@";
-    public static final String GA_TRACKING_ID = "UA-65307010-7";
-    public static final String VERSION_URL = "https://raw.githubusercontent.com/CyclopsMC/Versions/master/1.12/CommonCapabilities.txt";
-    
+    public static final String MOD_ID = Tags.MODID;
+    public static final String MOD_NAME = Tags.MODNAME;
+    public static final String MOD_VERSION = Tags.VERSION;
     // Paths
     public static final String TEXTURE_PATH_GUI = "textures/gui/";
     public static final String TEXTURE_PATH_SKINS = "textures/skins/";
@@ -32,14 +25,10 @@ public class Reference {
     
     // MOD ID's
     public static final String MOD_FORGE = "forge";
-    public static final String MOD_FORGE_VERSION = "@FORGE_VERSION@";
     public static final String MOD_FORGE_VERSION_MIN = "14.23.5.2768";
     public static final String MOD_CYCLOPSCORE = "cyclopscore";
-    public static final String MOD_CYCLOPSCORE_VERSION = "@CYCLOPSCORE_VERSION@";
     public static final String MOD_CYCLOPSCORE_VERSION_MIN = "1.6.0";
     public static final String MOD_VANILLA = "Minecraft";
-    public static final String MOD_RF_API = "CoFHAPI";
-    public static final String MOD_ENDERIO = "EnderIO";
     public static final String MOD_TCONSTRUCT = "tconstruct";
     public static final String MOD_FORESTRY = "forestry";
     public static final String MOD_IC2 = "ic2";

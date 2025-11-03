@@ -89,13 +89,6 @@ public class GeneralConfig extends DummyConfig {
         getMod().putGenericReference(ModBase.REFKEY_CRASH_ON_INVALID_RECIPE, GeneralConfig.crashOnInvalidRecipe);
         getMod().putGenericReference(ModBase.REFKEY_DEBUGCONFIG, GeneralConfig.debug);
         getMod().putGenericReference(ModBase.REFKEY_CRASH_ON_MODCOMPAT_CRASH, GeneralConfig.crashOnModCompatCrash);
-
-        if(analytics) {
-            Analytics.registerMod(getMod(), Reference.GA_TRACKING_ID);
-        }
-        if(versionChecker) {
-            Versions.registerMod(getMod(), CommonCapabilities._instance, Reference.VERSION_URL);
-        }
     }
     
     @Override

@@ -47,8 +47,7 @@ import org.cyclops.cyclopscore.proxy.ICommonProxy;
         useMetadata = true,
         version = Reference.MOD_VERSION,
         dependencies = Reference.MOD_DEPENDENCIES,
-        guiFactory = "org.cyclops.commoncapabilities.GuiConfigOverview$ExtendedConfigGuiFactory",
-        certificateFingerprint = Reference.MOD_FINGERPRINT
+        guiFactory = "org.cyclops.commoncapabilities.GuiConfigOverview$ExtendedConfigGuiFactory"
 )
 public class CommonCapabilities extends ModBaseVersionable {
     
